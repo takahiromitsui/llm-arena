@@ -1,7 +1,9 @@
 from fastapi import FastAPI, Query
+from fastapi.middleware.cors import CORSMiddleware
+
+# local
 from fastapi_backend.config import settings
 from fastapi_backend.azure_factory import AzureOpenAIFactory
-
 from fastapi_backend.models import UpdateScores
 
 app = FastAPI(
@@ -9,6 +11,18 @@ app = FastAPI(
     description="This is a simple FastAPI backend for the LLM Arena project.",
     version="0.1.0",
 )
+origins = [
+    "http://localhost:3000",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 
 # This is the temporal solution for storing scores
 # Global variable for scores

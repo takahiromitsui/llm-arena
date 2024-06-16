@@ -1,6 +1,17 @@
+'use client'
 import ModelPlaceholder from '@/components/model-placeholder';
 import Prompt from '@/components/prompt';
+import { fetchModels } from '@/lib/fetch-llms';
 export default function Home() {
+	const handleOnClick = async () => {
+		console.log('submit');
+		try {
+			const res = await fetchModels();
+			console.log(res);
+		} catch (error) {
+			console.error(error);
+		}
+	};
 	return (
 		<main>
 			<div className='flex justify-center bg-primary h-screen'>
@@ -13,7 +24,7 @@ export default function Home() {
 						<ModelPlaceholder modelA='Model A' modelB='Model B' />
 						{/* Prompt */}
 						<div className='pt-8'>
-							<Prompt />
+							<Prompt handleOnClick={handleOnClick} />
 						</div>
 					</div>
 				</div>
