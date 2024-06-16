@@ -1,8 +1,8 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Query
 from fastapi_backend.config import settings
 from fastapi_backend.azure_factory import AzureOpenAIFactory
 
-from fastapi_backend.models import UpdateScores, UserInput
+from fastapi_backend.models import UpdateScores
 
 app = FastAPI(
     title="FastAPI Backend",
@@ -31,11 +31,12 @@ def get_models():
     return models
 
 
-@app.post("/stream")
-async def stream(userInput: UserInput):
+@app.get("/stream")
+async def stream(full_name: str = Query(...), prompt: str = Query(...)):
     factory = AzureOpenAIFactory(settings)
     data = await factory.stream_response(
-        model_full_name=userInput.full_name, prompt=userInput.prompt
+        model_full_name=full_name,
+        prompt=prompt,
     )
     return data
 
