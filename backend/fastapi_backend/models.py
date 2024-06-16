@@ -25,6 +25,7 @@ class ModelResponse:
 
 
 class UserInput(BaseModel):
+    model: Model
     prompt: str
 
 

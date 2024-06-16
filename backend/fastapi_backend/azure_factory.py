@@ -61,4 +61,34 @@ class AzureOpenAIFactory:
     def get_scores(self):
         return self.scores
     
+    async def stream_professor(self, response):
+        async for chunk in response:
+            if len(chunk.choices) > 0:
+                delta = chunk.choices[0].delta
+                if delta.content:
+                    yield delta.content
     
+    async def stream_response(self, model: Model, prompt: str):
+        client = self.create()
+        response = await client.chat.completions.create(
+                model=f"{self.settings.AZURE_MODEL_PREFIX}-{model.full_name}",
+                messages=[
+                    {
+                        "role": "user",
+                        "content": prompt,
+                    },
+                ],
+                stream = True
+            )
+        from fastapi.responses import StreamingResponse
+        return StreamingResponse(self.stream_professor(response), media_type="text/plain")
+
+
+if __name__ == "__main__":
+    import asyncio
+    from config import settings
+    factory = AzureOpenAIFactory(settings)
+    models = asyncio.run(factory.stream_response(Model("A", "gpt3", "gpt-35-turbo"), "Hello"))
+    print(models)
+    # factory.update_scores(models, Feedback("A"))
+    # print(factory.get_scores
