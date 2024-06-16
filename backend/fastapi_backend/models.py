@@ -5,7 +5,7 @@ from pydantic import BaseModel
 
 
 @dataclass
-class Model:
+class LLMModel:
     blind_name: str  # A or B
     display_name: str  # e.g., gpt3
     full_name: str  # e.g., sometech-gpt-35-turbo
@@ -16,19 +16,6 @@ class Feedback:
     user_feedback: Literal["A", "B", "tie", "bad"]
 
 
-@dataclass
-class ModelResponse:
-    blind_name: Literal["A", "B"]  # A or B
-    display_name: str  # e.g., gpt3
-    full_name: str  # e.g., sometech-gpt-35-turbo
-    response: str  # answer from a model
-
-
 class UserInput(BaseModel):
-    model_full_name: str
+    full_name: str
     prompt: str
-
-
-class UpdateScoresInput(BaseModel):
-    model_responses: list[ModelResponse]
-    user_feedback: Literal["A", "B", "tie", "bad"]

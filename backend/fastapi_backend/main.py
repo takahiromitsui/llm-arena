@@ -27,6 +27,6 @@ def get_models():
 async def stream(userInput: UserInput):
     factory = AzureOpenAIFactory(settings)
     data = await factory.stream_response(
-        model_full_name=userInput.model_full_name, prompt=userInput.prompt
+        model_full_name=userInput.full_name, prompt=userInput.prompt
     )
     return data

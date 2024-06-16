@@ -4,7 +4,7 @@ from fastapi.responses import StreamingResponse
 
 # local
 from fastapi_backend.config import Settings
-from fastapi_backend.models import Model, Feedback, ModelResponse
+from fastapi_backend.models import LLMModel
 
 
 class AzureOpenAIFactory:
@@ -29,34 +29,14 @@ class AzureOpenAIFactory:
             api_version=self.settings.AZURE_OPENAI_API_VERSION,
         )
 
-    def pick_two_random_models(self) -> list[Model]:
+    def pick_two_random_models(self) -> list[LLMModel]:
         keys = random.sample(list(self.models.keys()), 2)
         blind_names = ["A", "B"]
         models = []
         for i, key in enumerate(keys):
-            model = Model(blind_names[i], key, self.models[key])
+            model = LLMModel(blind_names[i], key, self.models[key])
             models.append(model)
         return models
-
-    # this method could be used for actual database storage
-    def update_scores(
-        self, model_responses: list[ModelResponse], user_feedback: Feedback
-    ):
-        res = {}
-        for model_response in model_responses:
-            res[model_response.blind_name] = model_response.full_name
-
-        if user_feedback.user_feedback == "A":
-            self.scores[res.get("A", "")] = self.scores.get(res.get("A", ""), 0) + 1
-        elif user_feedback.user_feedback == "B":
-            self.scores[res.get("B", "")] = self.scores.get(res.get("B", ""), 0) + 1
-        elif user_feedback.user_feedback == "tie":
-            pass  # No need to do anything if it's a tie
-        elif user_feedback.user_feedback == "bad":
-            self.scores[res.get("A", "")] = self.scores.get(res.get("A", ""), 0) - 1
-            self.scores[res.get("B", "")] = self.scores.get(res.get("B", ""), 0) - 1
-        else:
-            raise ValueError("Invalid feedback")
 
     # this method could be used for actual database storage
     def get_scores(self):
