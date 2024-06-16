@@ -12,10 +12,12 @@ class LLMModel:
 
 
 @dataclass
-class Feedback:
-    user_feedback: Literal["A", "B", "tie", "bad"]
-
-
 class UserInput(BaseModel):
     full_name: str
     prompt: str
+
+
+@dataclass
+class UpdateScores(BaseModel):
+    llm_models: list[LLMModel]
+    feedback: Literal["A", "B", "tie", "bad"]
