@@ -1,5 +1,4 @@
 from fastapi import FastAPI
-from fastapi.responses import StreamingResponse
 from fastapi_backend.config import settings
 from fastapi_backend.azure_factory import AzureOpenAIFactory
 
@@ -11,9 +10,11 @@ app = FastAPI(
     version="0.1.0",
 )
 
+
 @app.get("/")
 def read_root():
-    return {"Hello": "World"} 
+    return {"Hello": "World"}
+
 
 @app.get("/models")
 def get_models():
@@ -21,8 +22,11 @@ def get_models():
     models = factory.pick_two_random_models()
     return models
 
+
 @app.post("/stream")
 async def stream(userInput: UserInput):
     factory = AzureOpenAIFactory(settings)
-    data = await factory.stream_response(model=userInput.model, prompt=userInput.prompt)
+    data = await factory.stream_response(
+        model_full_name=userInput.model_full_name, prompt=userInput.prompt
+    )
     return data
