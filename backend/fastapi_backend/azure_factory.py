@@ -47,7 +47,7 @@ class AzureOpenAIFactory:
             if len(chunk.choices) > 0:
                 delta = chunk.choices[0].delta
                 if delta.content:
-                    yield delta.content
+                    yield "data: " + delta.content + "\n\n"
 
     async def stream_response(self, model_full_name: str, prompt: str):
         client = self.create()
@@ -59,8 +59,9 @@ class AzureOpenAIFactory:
                     "content": prompt,
                 },
             ],
+            temperature=0.0,
             stream=True,
         )
         return StreamingResponse(
-            self.stream_professor(response), media_type="text/plain"
+            self.stream_professor(response), media_type="text/event-stream"
         )
