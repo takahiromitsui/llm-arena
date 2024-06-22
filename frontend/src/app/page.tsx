@@ -1,17 +1,25 @@
-'use client'
+'use client';
 import ModelPlaceholder from '@/components/model-placeholder';
 import Prompt from '@/components/prompt';
-import { fetchModels } from '@/lib/fetch-llms';
+import { useState } from 'react';
+
+export type LLMModel = {
+	blind_name: string;
+	display_name: string;
+	full_name: string;
+};
+
 export default function Home() {
-	const handleOnClick = async () => {
-		console.log('submit');
-		try {
-			const res = await fetchModels();
-			console.log(res);
-		} catch (error) {
-			console.error(error);
-		}
-	};
+	const [models, setModels] = useState<LLMModel[]>([]);
+	// const handleOnClick = async () => {
+	// 	try {
+	// 		const res = await fetchModels();
+	// 		setModels(res);
+	// 	} catch (error) {
+	// 		console.error(error);
+	// 	}
+	// };
+	console.log(models);
 	return (
 		<main>
 			<div className='flex justify-center bg-primary h-screen'>
@@ -24,7 +32,7 @@ export default function Home() {
 						<ModelPlaceholder modelA='Model A' modelB='Model B' />
 						{/* Prompt */}
 						<div className='pt-8'>
-							<Prompt handleOnClick={handleOnClick} />
+							<Prompt setModels={setModels}/>
 						</div>
 					</div>
 				</div>

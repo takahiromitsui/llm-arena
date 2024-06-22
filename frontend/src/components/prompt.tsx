@@ -4,6 +4,9 @@ import { Form, FormField } from '@/components/ui/form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
+import { fetchModels, fetchStream } from '@/lib/fetch-llms';
+import { Dispatch, SetStateAction } from 'react';
+import { LLMModel } from '@/app/page';
 
 const PromptSchema = z.object({
 	user_input: z.string().min(1, {
@@ -11,13 +14,35 @@ const PromptSchema = z.object({
 	}),
 });
 
-export default function Prompt() {
+type Props = {
+	setModels: Dispatch<SetStateAction<LLMModel[]>>;
+};
+
+export default function Prompt({ setModels }: Props) {
 	const promptForm = useForm<z.infer<typeof PromptSchema>>({
 		resolver: zodResolver(PromptSchema),
 	});
 
-	function onSubmit(data: z.infer<typeof PromptSchema>) {
-		console.log(data);
+	function getRealtimeData(sse: EventSource) {
+		sse.onmessage = e => {
+			console.log(e.data);
+		};
+		sse.onerror = () => {
+			sse.close();
+		};
+		return () => {
+			sse.close();
+		};
+	}
+
+	async function onSubmit(data: z.infer<typeof PromptSchema>) {
+		const res = await fetchModels();
+		const sse = new EventSource(
+			'http://localhost:8000/stream?full_name=gpt4-1106-se&prompt=' +
+				data.user_input,
+			{ withCredentials: true }
+		);
+		getRealtimeData(sse);
 	}
 	return (
 		<Form {...promptForm}>
