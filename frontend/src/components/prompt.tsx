@@ -37,13 +37,16 @@ export default function Prompt({ setModels, handleStreamChunk }: Props) {
 	}
 
 	async function onSubmit(data: z.infer<typeof PromptSchema>) {
-		const res = await fetchModels();
-		const sse = new EventSource(
-			'http://localhost:8000/stream?full_name=gpt-35-turbo&prompt=' +
-				data.user_input,
-			{ withCredentials: true }
-		);
-		getRealtimeData(sse);
+		try {
+			const res = await fetchModels();
+			const sse = new EventSource(
+				`http://localhost:8000/stream?full_name=${res[0].full_name}&prompt=${data.user_input}`,
+				{ withCredentials: true }
+			);
+			getRealtimeData(sse);
+		} catch (error) {
+			console.error(error);
+		}
 	}
 	return (
 		<Form {...promptForm}>
@@ -65,7 +68,6 @@ export default function Prompt({ setModels, handleStreamChunk }: Props) {
 					type='submit'
 					variant='destructive'
 					className='w-1/5 h-[100px] font-bold'
-					// onClick={handleOnClick}
 				>
 					Send
 				</Button>

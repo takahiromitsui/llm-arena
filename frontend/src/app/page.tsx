@@ -1,5 +1,5 @@
 'use client';
-import ModelPlaceholder from '@/components/model-placeholder';
+import ModelContainer from '@/components/model-container';
 import Prompt from '@/components/prompt';
 import { useState } from 'react';
 
@@ -23,8 +23,8 @@ export default function Home() {
 						<h1 className='text-3xl font-bold py-4 text-slate-100'>
 							Chatbot Arena
 						</h1>
-						{/* ModelPlaceholder */}
-						<ModelPlaceholder modelA={streamChunk} modelB='Model B' />
+						{/* ModelContainer */}
+						<ModelContainer modelA={streamChunk} modelB={streamChunk} />
 						{/* Prompt */}
 						<div className='pt-8'>
 							<Prompt setModels={setModels} handleStreamChunk={handleStreamChunk} />
