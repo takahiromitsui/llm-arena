@@ -3,7 +3,6 @@ import Feedback from '@/components/feedback';
 import ModelContainer from '@/components/model-container';
 import Prompt from '@/components/prompt';
 import Result from '@/components/result';
-import Navigation from '@/components/navigation';
 
 import { useState } from 'react';
 
@@ -39,32 +38,21 @@ export default function Home() {
 		setFeedback(null);
 	};
 	return (
-		<main>
-			<div className='flex justify-center bg-primary h-screen'>
-				<div className='w-full mx-20 flex bg-foreground '>
-					<div className='mx-20 w-full '>
-						<Navigation/>
-						{/* <h1 className='text-3xl font-bold py-4 text-slate-100'>
-							Chatbot Arena
-						</h1> */}
-						{/* ModelContainer */}
-						<ModelContainer modelA={streamsChunk[0]} modelB={streamsChunk[1]} />
-						{/* Prompt */}
-						<div className='pt-8'>
-							{feedback ? (
-								<Result models={models} handleReset={handleReset} />
-							) : streamsChunk[0] && streamsChunk[1] ? (
-								<Feedback models={models} setFeedback={setFeedback} />
-							) : (
-								<Prompt
-									setModels={setModels}
-									handleStreamsChunk={handleStreamsChunk}
-								/>
-							)}
-						</div>
-					</div>
-				</div>
+		<>
+			<ModelContainer modelA={streamsChunk[0]} modelB={streamsChunk[1]} />
+			{/* Prompt */}
+			<div className='pt-8'>
+				{feedback ? (
+					<Result models={models} handleReset={handleReset} />
+				) : streamsChunk[0] && streamsChunk[1] ? (
+					<Feedback models={models} setFeedback={setFeedback} />
+				) : (
+					<Prompt
+						setModels={setModels}
+						handleStreamsChunk={handleStreamsChunk}
+					/>
+				)}
 			</div>
-		</main>
+		</>
 	);
 }
