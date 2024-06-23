@@ -4,7 +4,7 @@ import { Form, FormField } from '@/components/ui/form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { fetchModels, fetchStream } from '@/lib/fetch-llms';
+import { fetchModels } from '@/lib/fetch-llms';
 import { Dispatch, SetStateAction } from 'react';
 import { LLMModel } from '@/app/page';
 
@@ -16,16 +16,17 @@ const PromptSchema = z.object({
 
 type Props = {
 	setModels: Dispatch<SetStateAction<LLMModel[]>>;
+	handleStreamChunk: (chunk: string) => void;
 };
 
-export default function Prompt({ setModels }: Props) {
+export default function Prompt({ setModels, handleStreamChunk }: Props) {
 	const promptForm = useForm<z.infer<typeof PromptSchema>>({
 		resolver: zodResolver(PromptSchema),
 	});
 
 	function getRealtimeData(sse: EventSource) {
 		sse.onmessage = e => {
-			console.log(e.data);
+			handleStreamChunk(e.data);
 		};
 		sse.onerror = () => {
 			sse.close();

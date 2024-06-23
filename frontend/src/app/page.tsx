@@ -11,15 +11,10 @@ export type LLMModel = {
 
 export default function Home() {
 	const [models, setModels] = useState<LLMModel[]>([]);
-	// const handleOnClick = async () => {
-	// 	try {
-	// 		const res = await fetchModels();
-	// 		setModels(res);
-	// 	} catch (error) {
-	// 		console.error(error);
-	// 	}
-	// };
-	console.log(models);
+	const [streamChunk, setStreamChunk] = useState<string>('');
+	const handleStreamChunk = (chunk: string) => {
+		setStreamChunk(prev => prev + chunk);
+	};
 	return (
 		<main>
 			<div className='flex justify-center bg-primary h-screen'>
@@ -29,10 +24,10 @@ export default function Home() {
 							Chatbot Arena
 						</h1>
 						{/* ModelPlaceholder */}
-						<ModelPlaceholder modelA='Model A' modelB='Model B' />
+						<ModelPlaceholder modelA={streamChunk} modelB='Model B' />
 						{/* Prompt */}
 						<div className='pt-8'>
-							<Prompt setModels={setModels}/>
+							<Prompt setModels={setModels} handleStreamChunk={handleStreamChunk} />
 						</div>
 					</div>
 				</div>
