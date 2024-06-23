@@ -3,6 +3,8 @@ import Feedback from '@/components/feedback';
 import ModelContainer from '@/components/model-container';
 import Prompt from '@/components/prompt';
 import Result from '@/components/result';
+import Navigation from '@/components/navigation';
+
 import { useState } from 'react';
 
 export type LLMModel = {
@@ -35,24 +37,22 @@ export default function Home() {
 		setModels([null, null]);
 		setStreamsChunk(['', '']);
 		setFeedback(null);
-	}
+	};
 	return (
 		<main>
 			<div className='flex justify-center bg-primary h-screen'>
 				<div className='w-full mx-20 flex bg-foreground '>
 					<div className='mx-20 w-full '>
-						<h1 className='text-3xl font-bold py-4 text-slate-100'>
+						<Navigation/>
+						{/* <h1 className='text-3xl font-bold py-4 text-slate-100'>
 							Chatbot Arena
-						</h1>
+						</h1> */}
 						{/* ModelContainer */}
 						<ModelContainer modelA={streamsChunk[0]} modelB={streamsChunk[1]} />
 						{/* Prompt */}
 						<div className='pt-8'>
 							{feedback ? (
-								<Result 
-								models={models}
-								handleReset = {handleReset}
-								/>
+								<Result models={models} handleReset={handleReset} />
 							) : streamsChunk[0] && streamsChunk[1] ? (
 								<Feedback models={models} setFeedback={setFeedback} />
 							) : (
