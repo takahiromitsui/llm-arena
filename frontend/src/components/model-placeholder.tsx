@@ -10,13 +10,13 @@ export default function ModelPlaceholder({ modelA, modelB }: Props) {
 				<label className='p-2 bg-primary border border-slate-700 rounded-md bg-scroll'>
 					Model A
 				</label>
-				<div className='pt-4 pl-2'>{modelA}</div>
+				<div className='pt-4 pl-2 overflow-auto  h-[450px]'>{modelA}</div>
 			</div>
 			<div className='w-1/2 border-l border-slate-700'>
 				<label className='p-2 bg-primary border border-slate-700 rounded-md bg-scroll'>
 					Model B
 				</label>
-				<div className='pt-4 pl-2'>{modelB}</div>
+				<div className='pt-4 pl-2 overflow-auto  h-[450px]'>{modelB}</div>
 			</div>
 		</div>
 	);

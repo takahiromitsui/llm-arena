@@ -39,7 +39,7 @@ export default function Prompt({ setModels, handleStreamChunk }: Props) {
 	async function onSubmit(data: z.infer<typeof PromptSchema>) {
 		const res = await fetchModels();
 		const sse = new EventSource(
-			'http://localhost:8000/stream?full_name=gpt4-1106-se&prompt=' +
+			'http://localhost:8000/stream?full_name=gpt-35-turbo&prompt=' +
 				data.user_input,
 			{ withCredentials: true }
 		);
