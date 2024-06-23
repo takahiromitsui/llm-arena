@@ -16,6 +16,10 @@ export default function Home() {
 		null,
 	]);
 	const [streamsChunk, setStreamsChunk] = useState<[string, string]>(['', '']);
+	const [feedback, setFeedback] = useState<'A' | 'B' | 'tie' | 'bad' | null>(
+		null
+	);
+
 	const handleStreamsChunk = (chunk: string, modelIdentifier: 'A' | 'B') => {
 		setStreamsChunk(prev => {
 			const [modelA, modelB] = prev;
@@ -26,6 +30,7 @@ export default function Home() {
 			}
 		});
 	};
+	console.log(feedback)
 	return (
 		<main>
 			<div className='flex justify-center bg-primary h-screen'>
@@ -39,7 +44,7 @@ export default function Home() {
 						{/* Prompt */}
 						<div className='pt-8'>
 							{streamsChunk[0] && streamsChunk[1] ? (
-								<Feedback />
+								<Feedback models={models} setFeedback={setFeedback} />
 							) : (
 								<Prompt
 									setModels={setModels}
