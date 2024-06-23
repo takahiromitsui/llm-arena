@@ -1,4 +1,5 @@
 'use client';
+import Feedback from '@/components/feedback';
 import ModelContainer from '@/components/model-container';
 import Prompt from '@/components/prompt';
 import { useState } from 'react';
@@ -25,7 +26,6 @@ export default function Home() {
 			}
 		});
 	};
-	console.log(streamsChunk);
 	return (
 		<main>
 			<div className='flex justify-center bg-primary h-screen'>
@@ -38,10 +38,14 @@ export default function Home() {
 						<ModelContainer modelA={streamsChunk[0]} modelB={streamsChunk[1]} />
 						{/* Prompt */}
 						<div className='pt-8'>
-							<Prompt
-								setModels={setModels}
-								handleStreamsChunk={handleStreamsChunk}
-							/>
+							{streamsChunk[0] && streamsChunk[1] ? (
+								<Feedback />
+							) : (
+								<Prompt
+									setModels={setModels}
+									handleStreamsChunk={handleStreamsChunk}
+								/>
+							)}
 						</div>
 					</div>
 				</div>
