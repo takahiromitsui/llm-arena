@@ -15,35 +15,44 @@ const PromptSchema = z.object({
 });
 
 type Props = {
-	setModels: Dispatch<SetStateAction<LLMModel[]>>;
-	handleStreamChunk: (chunk: string) => void;
+	// models: [LLMModel | null, LLMModel | null];
+	setModels: Dispatch<SetStateAction<[LLMModel | null, LLMModel | null]>>;
+	handleStreamsChunk: (chunk: string, modelIdentifier: 'A' | 'B') => void;
+	// setStreamsChunk: Dispatch<SetStateAction<[string, string]>>;
 };
 
-export default function Prompt({ setModels, handleStreamChunk }: Props) {
+export default function Prompt({
+	setModels,
+	handleStreamsChunk,
+}:
+Props) {
 	const promptForm = useForm<z.infer<typeof PromptSchema>>({
 		resolver: zodResolver(PromptSchema),
 	});
-
-	function getRealtimeData(sse: EventSource) {
-		sse.onmessage = e => {
-			handleStreamChunk(e.data);
-		};
-		sse.onerror = () => {
-			sse.close();
-		};
-		return () => {
-			sse.close();
-		};
-	}
-
 	async function onSubmit(data: z.infer<typeof PromptSchema>) {
 		try {
 			const res = await fetchModels();
-			const sse = new EventSource(
-				`http://localhost:8000/stream?full_name=${res[0].full_name}&prompt=${data.user_input}`,
-				{ withCredentials: true }
-			);
-			getRealtimeData(sse);
+			setModels(res);
+			if (!res || res.length !== 2) {
+				return;
+			}
+			res.forEach((model: any) => {
+				if (model) {
+					const see = new EventSource(
+						`http://localhost:8000/stream?full_name=${model.full_name}&prompt=${data.user_input}`,
+						{ withCredentials: true }
+					);
+					see.onmessage = e => {
+						handleStreamsChunk(e.data, model.blind_name);
+					}
+					see.onerror = () => {
+						see.close();
+					};
+					return () => {
+						see.close();
+					};
+				}
+			});
 		} catch (error) {
 			console.error(error);
 		}
