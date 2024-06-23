@@ -1,6 +1,6 @@
 import { LLMModel } from '@/app/page';
 
-const BASE_URL = 'http://localhost:8000';
+const BASE_URL = 'http://127.0.0.1:8000';
 
 export async function fetchModels() {
 	const url = `${BASE_URL}/models`;
@@ -29,4 +29,20 @@ export async function putScores(
 		}),
 	});
 	return response.json();
+}
+
+export async function getScores() {
+	try {
+		const url = `${BASE_URL}/scores`;
+		const response = await fetch(url, {
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+		});
+
+		return response.json();
+	} catch (error) {
+		console.log(error);
+	}
 }

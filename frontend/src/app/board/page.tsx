@@ -1,3 +1,4 @@
+'use server';
 import {
 	Table,
 	TableBody,
@@ -7,19 +8,11 @@ import {
 	TableHeader,
 	TableRow,
 } from '@/components/ui/table';
+import { getScores } from '@/lib/fetch-llms';
 
-const scores = [
-	{
-		score: 10,
-		model: 'gpt-35-turbo',
-	},
-	{
-		score: 5,
-		model: 'gpt4-1106-se',
-	},
-];
+export default async function Board() {
+	const res = await getScores();
 
-export default function Board() {
 	return (
 		<Table className='text-slate-100'>
 			<TableCaption className='text-slate-100'>
@@ -33,13 +26,21 @@ export default function Board() {
 				</TableRow>
 			</TableHeader>
 			<TableBody>
-				{scores.map(score => (
-					<TableRow key={score.score}>
-						<TableCell className='font-medium'>1</TableCell>
-						<TableCell>{score.model}</TableCell>
-						<TableCell>{score.score}</TableCell>
+				{res && res.length !== 0 ? (
+					res.map((data: any) => (
+						<TableRow key={data.model}>
+							<TableCell className='font-medium'>{data.rank}</TableCell>
+							<TableCell>{data.model}</TableCell>
+							<TableCell>{data.score}</TableCell>
+						</TableRow>
+					))
+				) : (
+					<TableRow key={'data.model'}>
+						<TableCell className='font-medium'></TableCell>
+						<TableCell></TableCell>
+						<TableCell></TableCell>
 					</TableRow>
-				))}
+				)}
 			</TableBody>
 		</Table>
 	);
