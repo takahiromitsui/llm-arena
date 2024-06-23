@@ -31,6 +31,11 @@ export default function Home() {
 			}
 		});
 	};
+	const handleReset = () => {
+		setModels([null, null]);
+		setStreamsChunk(['', '']);
+		setFeedback(null);
+	}
 	return (
 		<main>
 			<div className='flex justify-center bg-primary h-screen'>
@@ -44,7 +49,10 @@ export default function Home() {
 						{/* Prompt */}
 						<div className='pt-8'>
 							{feedback ? (
-								<Result models={models}/>
+								<Result 
+								models={models}
+								handleReset = {handleReset}
+								/>
 							) : streamsChunk[0] && streamsChunk[1] ? (
 								<Feedback models={models} setFeedback={setFeedback} />
 							) : (
