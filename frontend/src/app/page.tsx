@@ -2,6 +2,7 @@
 import Feedback from '@/components/feedback';
 import ModelContainer from '@/components/model-container';
 import Prompt from '@/components/prompt';
+import Result from '@/components/result';
 import { useState } from 'react';
 
 export type LLMModel = {
@@ -30,7 +31,6 @@ export default function Home() {
 			}
 		});
 	};
-	console.log(feedback)
 	return (
 		<main>
 			<div className='flex justify-center bg-primary h-screen'>
@@ -43,7 +43,9 @@ export default function Home() {
 						<ModelContainer modelA={streamsChunk[0]} modelB={streamsChunk[1]} />
 						{/* Prompt */}
 						<div className='pt-8'>
-							{streamsChunk[0] && streamsChunk[1] ? (
+							{feedback ? (
+								<Result models={models}/>
+							) : streamsChunk[0] && streamsChunk[1] ? (
 								<Feedback models={models} setFeedback={setFeedback} />
 							) : (
 								<Prompt
