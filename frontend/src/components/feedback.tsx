@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Dispatch, SetStateAction } from 'react';
 import { LLMModel } from '@/app/page';
 import { patchScores } from '@/lib/fetch-llms';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 type Props = {
 	models: [LLMModel | null, LLMModel | null];
@@ -12,12 +13,30 @@ type Props = {
 };
 
 export default function Feedback({ models, setFeedback }: Props) {
+	const queryClient = useQueryClient();
+	const feedbackMutation = useMutation({
+		mutationFn: async ({
+			feedback,
+			models,
+		}: {
+			feedback: 'A' | 'B' | 'tie' | 'bad' | null;
+			models: [LLMModel | null, LLMModel | null];
+		}) => await patchScores(models, feedback),
+		onSuccess: () => {
+			queryClient.invalidateQueries({
+				queryKey: ['scores'],
+			});
+		},
+		onError: () => {
+			console.error('Error sending feedback');
+		},
+	});
 	async function sendFeedback(
 		feedback: 'A' | 'B' | 'tie' | 'bad' | null,
 		models: [LLMModel | null, LLMModel | null]
 	) {
 		setFeedback(feedback);
-		await patchScores(models, feedback);
+		await feedbackMutation.mutateAsync({ feedback, models });
 	}
 	return (
 		<div className='flex justify-between'>
