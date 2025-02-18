@@ -13,13 +13,13 @@ export async function fetchModels() {
 	return response.json();
 }
 
-export async function putScores(
+export async function patchScores(
 	llm_models: [LLMModel | null, LLMModel | null],
 	feedback: 'A' | 'B' | 'tie' | 'bad' | null
 ) {
 	const url = `${BASE_URL}/scores`;
 	const response = await fetch(url, {
-		method: 'PUT',
+		method: 'PATCH',
 		headers: {
 			'Content-Type': 'application/json',
 		},
@@ -31,7 +31,9 @@ export async function putScores(
 	return response.json();
 }
 
-export async function getScores() {
+export async function getScores(): Promise<
+	{ model: string; score: number; rank: number }[]
+> {
 	try {
 		const url = `${BASE_URL}/scores`;
 		const response = await fetch(url, {
@@ -40,9 +42,19 @@ export async function getScores() {
 				'Content-Type': 'application/json',
 			},
 		});
+		const scores = await response.json();
+		// Convert the scores object to an array of entries and sort by score
+		const sortedScores = Object.entries(scores)
+			.sort(([, a], [, b]) => (b as number) - (a as number))
+			.map(([model, score], index) => ({
+				model,
+				score: score as number,
+				rank: index + 1,
+			}));
 
-		return response.json();
+		return sortedScores;
 	} catch (error) {
 		console.log(error);
+		return [];
 	}
 }

@@ -25,7 +25,18 @@ export default async function Board() {
 					<TableHead className='text-slate-100'>Point</TableHead>
 				</TableRow>
 			</TableHeader>
-			<TableBody>
+			{res ? (
+				<TableBody>
+					{res.map(({ model, score, rank }) => (
+						<TableRow key={model}>
+							<TableCell className='font-medium'>{rank}</TableCell>
+							<TableCell>{model}</TableCell>
+							<TableCell>{score}</TableCell>
+						</TableRow>
+					))}
+				</TableBody>
+			) : null}
+			{/* <TableBody>
 				{res && res.length !== 0 ? (
 					res.map((data: any) => (
 						<TableRow key={data.model}>
@@ -41,7 +52,7 @@ export default async function Board() {
 						<TableCell></TableCell>
 					</TableRow>
 				)}
-			</TableBody>
+			</TableBody> */}
 		</Table>
 	);
 }

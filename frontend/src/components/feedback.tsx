@@ -4,7 +4,7 @@ import { MoveLeft, MoveRight, Handshake, ThumbsDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Dispatch, SetStateAction } from 'react';
 import { LLMModel } from '@/app/page';
-import { putScores } from '@/lib/fetch-llms';
+import { patchScores } from '@/lib/fetch-llms';
 
 type Props = {
 	models: [LLMModel | null, LLMModel | null];
@@ -17,7 +17,7 @@ export default function Feedback({ models, setFeedback }: Props) {
 		models: [LLMModel | null, LLMModel | null]
 	) {
 		setFeedback(feedback);
-		await putScores(models, feedback);
+		await patchScores(models, feedback);
 	}
 	return (
 		<div className='flex justify-between'>
