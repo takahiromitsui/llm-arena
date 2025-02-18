@@ -51,7 +51,7 @@ async def stream(full_name: str = Query(...), prompt: str = Query(...)):
         )
 
 
-@app.put("/scores")
+@app.patch("/scores")
 def update_scores(update_scores: UpdateScores):
     res = {}
     for model in update_scores.llm_models:

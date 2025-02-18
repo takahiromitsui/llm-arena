@@ -23,7 +23,12 @@ settings = Settings(
     # AZURE_MODEL_PREFIX=os.getenv("AZURE_MODEL_PREFIX", ""),
 )
 
-llm_models = ["gpt-35-turbo", "gpt-4"]
+llm_models = [
+    "gpt-35-turbo",
+    "gpt-4",
+    "gpt-4-32k",
+    "gpt-4o-mini",
+]
 
 # This is the temporal solution for storing scores
 # Global variable for scores
