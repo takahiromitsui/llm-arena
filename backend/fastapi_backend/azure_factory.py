@@ -3,24 +3,14 @@ from openai import AsyncAzureOpenAI
 from fastapi.responses import StreamingResponse
 
 # local
-from fastapi_backend.config import Settings
+from fastapi_backend.config import SCORES, Settings
 from fastapi_backend.models import LLMModel
 
 
 class AzureOpenAIFactory:
     def __init__(self, settings: Settings):
         self.settings = settings
-        self.models = {
-            "gpt3": "gpt-35-turbo",
-            "gpt4": "gpt4-turbo-2024-04-09",
-            "gpt4-se": "gpt4-1106-se",
-        }
-        # this variable could be used for actual database storage
-        self.scores = {
-            self.models["gpt3"]: 0,
-            self.models["gpt4"]: 0,
-            self.models["gpt4-se"]: 0,
-        }
+        self.models = SCORES
 
     def create(self):
         return AsyncAzureOpenAI(
@@ -34,13 +24,9 @@ class AzureOpenAIFactory:
         blind_names = ["A", "B"]
         models = []
         for i, key in enumerate(keys):
-            model = LLMModel(blind_names[i], key, self.models[key])
+            model = LLMModel(blind_names[i], key, key)
             models.append(model)
         return models
-
-    # this method could be used for actual database storage
-    def get_scores(self):
-        return self.scores
 
     async def stream_professor(self, response):
         async for chunk in response:

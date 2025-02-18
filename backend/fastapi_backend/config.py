@@ -22,3 +22,9 @@ settings = Settings(
     AZURE_OPENAI_API_VERSION=os.getenv("AZURE_OPENAI_API_VERSION", ""),
     # AZURE_MODEL_PREFIX=os.getenv("AZURE_MODEL_PREFIX", ""),
 )
+
+llm_models = ["gpt-35-turbo", "gpt-4"]
+
+# This is the temporal solution for storing scores
+# Global variable for scores
+SCORES = {model: 0 for model in llm_models}
