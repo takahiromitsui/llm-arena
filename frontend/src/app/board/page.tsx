@@ -1,4 +1,4 @@
-'use server';
+'use client';
 import {
 	Table,
 	TableBody,
@@ -9,10 +9,20 @@ import {
 	TableRow,
 } from '@/components/ui/table';
 import { getScores } from '@/lib/fetch-llms';
+import { useQuery } from '@tanstack/react-query';
 
-export default async function Board() {
-	const res = await getScores();
+export default function Board() {
+	const {
+		data: res,
+		isPending,
+		isError,
+	} = useQuery({
+		queryKey: ['scores'],
+		queryFn: getScores,
+	});
 
+	if (isPending) return <div>Loading...</div>;
+	if (isError) return <div>Error loading scores</div>;
 	return (
 		<Table className='text-slate-100'>
 			<TableCaption className='text-slate-100'>
@@ -36,23 +46,6 @@ export default async function Board() {
 					))}
 				</TableBody>
 			) : null}
-			{/* <TableBody>
-				{res && res.length !== 0 ? (
-					res.map((data: any) => (
-						<TableRow key={data.model}>
-							<TableCell className='font-medium'>{data.rank}</TableCell>
-							<TableCell>{data.model}</TableCell>
-							<TableCell>{data.score}</TableCell>
-						</TableRow>
-					))
-				) : (
-					<TableRow key={'data.model'}>
-						<TableCell className='font-medium'></TableCell>
-						<TableCell></TableCell>
-						<TableCell></TableCell>
-					</TableRow>
-				)}
-			</TableBody> */}
 		</Table>
 	);
 }
