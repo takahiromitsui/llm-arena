@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Query
+from fastapi import FastAPI, Query, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
 # local
@@ -47,12 +47,18 @@ def get_models():
 
 @app.get("/stream")
 async def stream(full_name: str = Query(...), prompt: str = Query(...)):
-    factory = AzureOpenAIFactory(settings)
-    data = await factory.stream_response(
-        model_full_name=full_name,
-        prompt=prompt,
-    )
-    return data
+    try:
+        factory = AzureOpenAIFactory(settings)
+        data = await factory.stream_response(
+            model_full_name=full_name,
+            prompt=prompt,
+        )
+        return data
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=str(e),
+        )
 
 
 @app.put("/scores")

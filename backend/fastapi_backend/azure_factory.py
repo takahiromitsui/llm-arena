@@ -52,7 +52,7 @@ class AzureOpenAIFactory:
     async def stream_response(self, model_full_name: str, prompt: str):
         client = self.create()
         response = await client.chat.completions.create(
-            model=f"{self.settings.AZURE_MODEL_PREFIX}-{model_full_name}",
+            model=model_full_name,
             messages=[
                 {
                     "role": "user",
