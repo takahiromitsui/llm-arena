@@ -4,7 +4,7 @@ import { Form, FormField } from '@/components/ui/form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { fetchModels } from '@/lib/fetch-llms';
+import { API_VERSION, BASE_URL, fetchModels } from '@/lib/fetch-llms';
 import { Dispatch, SetStateAction } from 'react';
 import { LLMModel } from '@/app/page';
 
@@ -21,11 +21,7 @@ type Props = {
 	// setStreamsChunk: Dispatch<SetStateAction<[string, string]>>;
 };
 
-export default function Prompt({
-	setModels,
-	handleStreamsChunk,
-}:
-Props) {
+export default function Prompt({ setModels, handleStreamsChunk }: Props) {
 	const promptForm = useForm<z.infer<typeof PromptSchema>>({
 		resolver: zodResolver(PromptSchema),
 	});
@@ -39,12 +35,12 @@ Props) {
 			res.forEach((model: any) => {
 				if (model) {
 					const see = new EventSource(
-						`http://localhost:8000/stream?full_name=${model.full_name}&prompt=${data.user_input}`,
+						`${BASE_URL}/${API_VERSION}/chats?full_name=${model.full_name}&prompt=${data.user_input}`,
 						{ withCredentials: true }
 					);
 					see.onmessage = e => {
 						handleStreamsChunk(e.data, model.blind_name);
-					}
+					};
 					see.onerror = () => {
 						see.close();
 					};

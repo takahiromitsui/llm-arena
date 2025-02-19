@@ -1,9 +1,10 @@
 import { LLMModel } from '@/app/page';
 
-const BASE_URL = 'http://127.0.0.1:8000';
+export const BASE_URL = process.env.BACKEND_URI || 'http://127.0.0.1:8000';
+export const API_VERSION = 'api/v1';
 
 export async function fetchModels() {
-	const url = `${BASE_URL}/models`;
+	const url = `${BASE_URL}/${API_VERSION}/models`;
 	const response = await fetch(url, {
 		method: 'GET',
 		headers: {
@@ -17,7 +18,7 @@ export async function patchScores(
 	llm_models: [LLMModel | null, LLMModel | null],
 	feedback: 'A' | 'B' | 'tie' | 'bad' | null
 ) {
-	const url = `${BASE_URL}/scores`;
+	const url = `${BASE_URL}/${API_VERSION}/scores`;
 	const response = await fetch(url, {
 		method: 'PATCH',
 		headers: {
@@ -35,7 +36,7 @@ export async function getScores(): Promise<
 	{ model: string; score: number; rank: number }[]
 > {
 	try {
-		const url = `${BASE_URL}/scores`;
+		const url = `${BASE_URL}/${API_VERSION}/scores`;
 		const response = await fetch(url, {
 			method: 'GET',
 			headers: {
