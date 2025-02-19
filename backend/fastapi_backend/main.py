@@ -5,6 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi_backend.config.config import SCORES, settings
 from fastapi_backend.azure_factory import AzureOpenAIFactory
 from fastapi_backend.models import UpdateScores
+from fastapi_backend.v1.router import api_v1_router
 
 app = FastAPI(
     title="FastAPI Backend",
@@ -75,3 +76,5 @@ def update_scores(update_scores: UpdateScores):
 @app.get("/scores")
 def get_scores():
     return SCORES
+
+app.include_router(api_v1_router)
