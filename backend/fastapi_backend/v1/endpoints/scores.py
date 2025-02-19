@@ -1,5 +1,7 @@
 from fastapi_backend.utils.logger import logger
 from fastapi_backend.config.config import SCORES
+from fastapi_backend.models import UpdateScores
+from fastapi_backend.services.scores import update_scores_service
 from fastapi import APIRouter, HTTPException
 
 router = APIRouter()
@@ -36,4 +38,35 @@ def get_scores():
         return SCORES
     except Exception as e:
         logger.error({str(e)})
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.patch(
+    path="",
+    responses={
+        200: {
+            "description": "Update scores",
+            "content": {
+                "application/json": {
+                    "example": {
+                        "status": "success",
+                        "message": "Scores updated successfully",
+                    }
+                }
+            },
+        },
+        400: {"description": "Bad Request"},
+        500: {"description": "Internal Server Error"},
+    },
+)
+def update_scores(update_scores: UpdateScores):
+    try:
+        updated = update_scores_service(update_scores)
+        logger.info(updated)
+        return updated
+    except ValueError as e:
+        logger.error(str(e))
+        raise HTTPException(status_code=400, detail=str(e))
+    except Exception as e:
+        logger.error(str(e))
         raise HTTPException(status_code=500, detail=str(e))
