@@ -1,3 +1,4 @@
+from fastapi_backend.v1.endpoints import chats
 from fastapi_backend.v1.endpoints import scores
 from fastapi_backend.v1.endpoints import models
 from fastapi import APIRouter
@@ -16,4 +17,9 @@ api_v1_router.include_router(
 api_v1_router.include_router(
     router=scores.router,
     prefix="/scores",
+)
+
+api_v1_router.include_router(
+    router=chats.router,
+    prefix="/chats",
 )

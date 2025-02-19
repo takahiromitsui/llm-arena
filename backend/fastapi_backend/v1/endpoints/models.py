@@ -1,4 +1,4 @@
-from fastapi_backend.azure_factory import AzureOpenAIFactory
+from fastapi_backend.services.azure_factory import AzureOpenAIFactory
 from fastapi_backend.config.config import settings
 from fastapi_backend.utils.logger import logger
 from fastapi import APIRouter, HTTPException

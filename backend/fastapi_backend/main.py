@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 # local
 from fastapi_backend.config.config import SCORES, settings
-from fastapi_backend.azure_factory import AzureOpenAIFactory
+from fastapi_backend.services.azure_factory import AzureOpenAIFactory
 from fastapi_backend.models import UpdateScores
 from fastapi_backend.v1.router import api_v1_router
 

@@ -37,6 +37,10 @@ class AzureOpenAIFactory:
 
     async def stream_response(self, model_full_name: str, prompt: str):
         client = self.create()
+        availableModels = SCORES.keys()
+        if model_full_name not in availableModels:
+            raise ValueError("Invalid model")
+
         response = await client.chat.completions.create(
             model=model_full_name,
             messages=[
