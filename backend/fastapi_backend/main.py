@@ -2,7 +2,7 @@ from fastapi import FastAPI, Query, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
 # local
-from fastapi_backend.config import SCORES, settings
+from fastapi_backend.config.config import SCORES, settings
 from fastapi_backend.azure_factory import AzureOpenAIFactory
 from fastapi_backend.models import UpdateScores
 

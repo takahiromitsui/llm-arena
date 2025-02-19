@@ -3,7 +3,7 @@ from openai import AsyncAzureOpenAI
 from fastapi.responses import StreamingResponse
 
 # local
-from fastapi_backend.config import SCORES, Settings
+from fastapi_backend.config.config import SCORES, Settings
 from fastapi_backend.models import LLMModel
 
 
