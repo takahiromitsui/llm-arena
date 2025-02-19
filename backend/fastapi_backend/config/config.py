@@ -12,6 +12,8 @@ class Settings:
     AZURE_OPENAI_API_BASE_URL: str
     AZURE_OPENAI_API_KEY: str
     AZURE_OPENAI_API_VERSION: str
+    WHITE_LIST: str
+    PORT: int
 
 
 # settings
@@ -19,6 +21,8 @@ settings = Settings(
     AZURE_OPENAI_API_BASE_URL=os.getenv("AZURE_OPENAI_API_BASE_URL", ""),
     AZURE_OPENAI_API_KEY=os.getenv("AZURE_OPENAI_API_KEY", ""),
     AZURE_OPENAI_API_VERSION=os.getenv("AZURE_OPENAI_API_VERSION", ""),
+    WHITE_LIST=os.getenv("WHITE_LIST", ""),
+    PORT=int(os.getenv("PORT", 8000)),
 )
 # models
 llm_models = [
