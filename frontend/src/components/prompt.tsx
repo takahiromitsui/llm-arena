@@ -66,6 +66,12 @@ export default function Prompt({ setModels, handleStreamsChunk }: Props) {
 							className='w-3/4 h-[100px]'
 							placeholder='Enter your prompt'
 							{...field}
+							onKeyDown={e => {
+								if (e.key === 'Enter' && !e.shiftKey) {
+									e.preventDefault();
+									promptForm.handleSubmit(onSubmit)();
+								}
+							}}
 						/>
 					)}
 				/>
