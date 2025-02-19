@@ -1,4 +1,4 @@
-from fastapi_backend.services.azure_factory import AzureOpenAIFactory
+from fastapi_backend.services.azure import AzureOpenAI
 from fastapi_backend.config.config import settings
 from fastapi_backend.utils.logger import logger
 from fastapi import APIRouter, HTTPException
@@ -34,8 +34,8 @@ router = APIRouter()
 )
 def get_models():
     try:
-        factory = AzureOpenAIFactory(settings)
-        models = factory.pick_two_random_models()
+        azure = AzureOpenAI(settings)
+        models = azure.pick_two_random_models()
         if not models:
             logger.error("No models found")
             raise HTTPException(status_code=503, detail="No models found")

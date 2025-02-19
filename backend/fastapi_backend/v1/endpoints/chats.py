@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException, Query
 from fastapi_backend.config.config import settings
-from fastapi_backend.services.azure_factory import AzureOpenAIFactory
+from fastapi_backend.services.azure import AzureOpenAI
 from fastapi_backend.utils.logger import logger
 
 router = APIRouter()
@@ -27,8 +27,8 @@ async def getChats(full_name: str = Query(...), prompt: str = Query(...)):
                 status_code=400, detail="full_name and prompt are required"
             )
 
-        factory = AzureOpenAIFactory(settings)
-        data = await factory.stream_response(
+        azure = AzureOpenAI(settings)
+        data = await azure.stream_response(
             model_full_name=full_name,
             prompt=prompt,
         )

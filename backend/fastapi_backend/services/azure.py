@@ -7,7 +7,7 @@ from fastapi_backend.config.config import SCORES, Settings
 from fastapi_backend.schemas.schemas import LLMModel
 
 
-class AzureOpenAIFactory:
+class AzureOpenAI:
     def __init__(self, settings: Settings):
         self.settings = settings
         self.models = SCORES
