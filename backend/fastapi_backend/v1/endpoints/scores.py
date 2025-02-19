@@ -1,6 +1,6 @@
 from fastapi_backend.utils.logger import logger
 from fastapi_backend.config.config import SCORES
-from fastapi_backend.models import UpdateScores
+from fastapi_backend.schemas.schemas import UpdateScores
 from fastapi_backend.services.scores import update_scores_service
 from fastapi import APIRouter, HTTPException
 

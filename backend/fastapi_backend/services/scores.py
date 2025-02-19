@@ -1,5 +1,5 @@
 from fastapi_backend.config.config import SCORES
-from fastapi_backend.models import UpdateScores
+from fastapi_backend.schemas.schemas import UpdateScores
 
 
 def update_scores_service(update_scores: UpdateScores):
